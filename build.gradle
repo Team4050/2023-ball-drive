@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2023.2.1"
+    id "edu.wpi.first.GradleRIO" version "2023.4.2"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -45,9 +45,17 @@ wpi.java.debugJni = false
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
 
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 5.
 dependencies {
+    // Finally chose a swerve repo, SwoLib
+    // It's the only one still maintained
+    implementation 'com.github.CshCyberhawks:SwoLib:e45b006'
+
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
 
