@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.Operator;
 import frc.robot.commands.Autos;
+import frc.robot.subsystems.BallDriveModule;
 import frc.robot.subsystems.BallDrivetrain;
 import frc.robot.subsystems.BallDrivetrainConfig;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,7 +26,12 @@ public class RobotContainer {
   private final BallDrivetrainConfig drivetrainConfig = new BallDrivetrainConfig(
     new Pose2d(), new Pose2d(),
     new Pose2d(), new Pose2d());
-  private final BallDrivetrain drivetrain = new BallDrivetrain(null, null, null, null, null);
+  private final BallDrivetrain drivetrain = new BallDrivetrain(
+    new BallDriveModule(null, null),
+    new BallDriveModule(null, null),
+    new BallDriveModule(null, null),
+    new BallDriveModule(null, null),
+    drivetrainConfig);
 
   /** Commands **/
 
@@ -66,7 +72,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
+    /* TODO: Autonomous */
     return null;
   }
 }

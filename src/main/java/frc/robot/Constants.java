@@ -35,7 +35,7 @@ public final class Constants {
     public static final int ArmLevelTwoPosition = 3000;
     public static final int ArmRestPosition = 0;
 
-    // Arm soft limits. 0 is at rest, so we don't want to go further back.
+    // Arm soft limits. 0 is at rest, so we don't want to go too further back.
     public static final int ArmEncoderLimitLow = -10;
     public static final int ArmEncoderLimitHigh = 5379;
 

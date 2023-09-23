@@ -5,15 +5,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import cshcyberhawks.swolib.swerve.SwerveDriveTrain;
 import cshcyberhawks.swolib.swerve.configurations.FourWheelSwerveConfiguration;
 import cshcyberhawks.swolib.swerve.configurations.SwerveModuleConfiguration;*/
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BallDrivetrain extends SubsystemBase {
   /*
-   * Front Sparkmax drive motors
+   * Drive modules & module config
    */
   //#region
   private BallDriveModule FL;
@@ -24,8 +20,15 @@ public class BallDrivetrain extends SubsystemBase {
   private BallDrivetrainConfig config;
   //#endregion
 
-  //SwerveDriveTrain driveTrain;
-
+  /**
+   * A drivetrain with balls. Control inputs are very similar to mecanum.
+   * This might backport well to old mecanum drive code.
+   * @param FL
+   * @param FR
+   * @param RL
+   * @param RR
+   * @param config The drivetrain's configuration, probably the biggest difference from mecanum code.
+   */
   public BallDrivetrain(BallDriveModule FL, BallDriveModule FR, BallDriveModule RL, BallDriveModule RR, BallDrivetrainConfig config) {
     this.FL = FL;
     this.FR = FR;
@@ -37,8 +40,11 @@ public class BallDrivetrain extends SubsystemBase {
     //driveTrain = new SwerveDriveTrain(config, null);
   }
 
-  /*
-   * Sets drivetrain speed
+  /**
+   * Sets the drivetrain's target speed
+   * @param x Forward/back speed
+   * @param y Strafing speed
+   * @param a Turning speed
    */
   public void set(double x, double y, double a) {
     Translation2d V = new Translation2d(x, y);
@@ -51,19 +57,25 @@ public class BallDrivetrain extends SubsystemBase {
     /* TODO: test FL and if it works create code for all other modules */
   }
 
-  /*
-   * Uses odometry to set the drivetrain speed relative to the robot's starting pose
+  /**
+   * Uses odometry to set the drivetrain's target speed relative to the robot's starting position
+   * @param x Absolute velocity in the X direction
+   * @param y Absolute velocity in the Y direction
+   * @param a Turning speed
    */
   public void setAbsolute(float x, float y, float a) {
-
+    /* TODO: yeah */
   }
 
-
+  /**
+   * Gets an array of robot-relative vectors that correspond to the module's velocities
+   * @return An ordered array of velocities: {Front left, front right, rear left, rear right}
+   */
   public Translation2d[] get() {
-    double[] fl = FL.get();
-    double[] fr = FR.get();
-    double[] rl = RL.get();
-    double[] rr = RR.get();
-    return new Translation2d[] {new Translation2d(fl[0], fl[1]), new Translation2d(fr[0], fr[1]), new Translation2d(rl[0], rl[1]), new Translation2d(rr[0], rr[1])};
+    return new Translation2d[] {
+      FL.getVector().rotateBy(config.FLTranspose.getAngle()),
+      FR.getVector().rotateBy(config.FRTranspose.getAngle()),
+      RL.getVector().rotateBy(config.RLTranspose.getAngle()),
+      RR.getVector().rotateBy(config.RRTranspose.getAngle())};
   }
 }
