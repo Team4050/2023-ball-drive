@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.BallDrivetrain;
+import frc.robot.subsystems.BallDriveSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
-  public static CommandBase exampleAuto(BallDrivetrain drivetrain) {
+  public static CommandBase exampleAuto(BallDriveSubsystem drivetrain) {
     return Commands.sequence(null, null);
   }
 

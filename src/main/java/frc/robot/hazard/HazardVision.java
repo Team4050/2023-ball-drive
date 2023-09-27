@@ -35,13 +35,14 @@
  import org.photonvision.PhotonCamera;
  import org.photonvision.PhotonPoseEstimator;
  import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+ import org.photonvision.targeting.PhotonTrackedTarget;
  
  public class HazardVision {
    public PhotonCamera chassis;
    public PhotonCamera claw;
    private PhotonPoseEstimator poseEstimator;
  
-   public HazardVision() {
+   public HazardVision(Pose2d previousPose) {
      chassis = new PhotonCamera(Constants.Vision.ChassisCamName);
      claw = new PhotonCamera(Constants.Vision.ClawCamName);
  
@@ -53,6 +54,7 @@
                PoseStrategy.AVERAGE_BEST_TARGETS,
                chassis,
                Constants.Vision.RobotToCamera);
+       poseEstimator.setLastPose(previousPose);
      } catch (IOException e) {
        DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
        poseEstimator = null;
@@ -68,7 +70,21 @@
      if (poseEstimator == null) {
        return Optional.empty();
      }
-     poseEstimator.setReferencePose(prevEstimatedRobotPose);
+     poseEstimator.setLastPose(prevEstimatedRobotPose);
      return poseEstimator.update();
+   }
+ 
+   public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+     if (poseEstimator == null) {
+       return Optional.empty();
+     }
+     return poseEstimator.update();
+   }
+ 
+   public boolean isTrustworthy() {
+     for (PhotonTrackedTarget t : chassis.getLatestResult().targets) {
+       if (t.getPoseAmbiguity() < 0.25) return true;
+     }
+     return false;
    }
  }

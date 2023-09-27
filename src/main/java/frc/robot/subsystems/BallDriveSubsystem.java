@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 /*import cshcyberhawks.swolib.*;
 import cshcyberhawks.swolib.swerve.SwerveDriveTrain;
@@ -7,7 +8,7 @@ import cshcyberhawks.swolib.swerve.configurations.FourWheelSwerveConfiguration;
 import cshcyberhawks.swolib.swerve.configurations.SwerveModuleConfiguration;*/
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class BallDrivetrain extends SubsystemBase {
+public class BallDriveSubsystem extends SubsystemBase {
   /*
    * Drive modules & module config
    */
@@ -20,6 +21,8 @@ public class BallDrivetrain extends SubsystemBase {
   private BallDrivetrainConfig config;
   //#endregion
 
+  private InformationSubsystem info;
+
   /**
    * A drivetrain with balls. Control inputs are very similar to mecanum.
    * This might backport well to old mecanum drive code.
@@ -29,7 +32,7 @@ public class BallDrivetrain extends SubsystemBase {
    * @param RR
    * @param config The drivetrain's configuration, probably the biggest difference from mecanum code.
    */
-  public BallDrivetrain(BallDriveModule FL, BallDriveModule FR, BallDriveModule RL, BallDriveModule RR, BallDrivetrainConfig config) {
+  public BallDriveSubsystem(BallDriveModule FL, BallDriveModule FR, BallDriveModule RL, BallDriveModule RR, BallDrivetrainConfig config, InformationSubsystem info) {
     this.FL = FL;
     this.FR = FR;
     this.RL = RL;
@@ -63,8 +66,11 @@ public class BallDrivetrain extends SubsystemBase {
    * @param y Absolute velocity in the Y direction
    * @param a Turning speed
    */
-  public void setAbsolute(float x, float y, float a) {
-    /* TODO: yeah */
+  public void setAbsolute(double x, double y, double a) {
+    Rotation2d rotation = info.getPoseEstimate().toPose2d().getRotation();
+    Translation2d vector = new Translation2d(x, y);
+    vector.rotateBy(rotation.unaryMinus());
+    set(vector.getX(), vector.getY(), a);
   }
 
   /**

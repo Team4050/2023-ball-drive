@@ -7,9 +7,12 @@ package frc.robot;
 import frc.robot.Constants.Operator;
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.BallDriveModule;
-import frc.robot.subsystems.BallDrivetrain;
+import frc.robot.subsystems.BallDriveSubsystem;
 import frc.robot.subsystems.BallDrivetrainConfig;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,14 +27,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   /** Subsystems **/
   private final BallDrivetrainConfig drivetrainConfig = new BallDrivetrainConfig(
-    new Pose2d(), new Pose2d(),
+    new Pose2d(new Translation2d(1, 1), new Rotation2d(180)), new Pose2d(),
     new Pose2d(), new Pose2d());
-  private final BallDrivetrain drivetrain = new BallDrivetrain(
+  private final BallDriveSubsystem drivetrain = new BallDriveSubsystem(
+    new BallDriveModule(new PWMSparkMax(0), new PWMSparkMax(1)),
     new BallDriveModule(null, null),
     new BallDriveModule(null, null),
     new BallDriveModule(null, null),
-    new BallDriveModule(null, null),
-    drivetrainConfig);
+    drivetrainConfig, null);
 
   /** Commands **/
 
@@ -47,9 +50,11 @@ public class RobotContainer {
     //Basic Xbox stick controls
     drivetrain.setDefaultCommand(new RunCommand(() -> {
       drivetrain.set(
-        primary.getLeftY(), 
-        -primary.getLeftX(), 
-        -primary.getRightX());
+        0, 
+        -0.01, 
+        0);
+      System.out.println(drivetrain.get()[0].getX());
+      
     }, drivetrain));
   }
 
