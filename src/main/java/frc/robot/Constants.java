@@ -63,10 +63,10 @@ public final class Constants {
   }
 
   public static class Actuators {
-    public static final int Arm = 6;
+    public static final int Arm = 10;
     public static final int ArmLimitA = 0;
     public static final int ArmLimitB = 0;
-    public static final int Wrist = 7;
+    public static final int Wrist = 11;
   }
 
   public static class Sensors {

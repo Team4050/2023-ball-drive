@@ -32,17 +32,23 @@ public class BallDrivetrainConfig {
   public BallDrivetrainConfig(Pose2d FL, Pose2d FR, Pose2d RL, Pose2d RR) {
     Rotation2d deg90 = new Rotation2d(Math.PI * 0.5);
     this.FL = FL;
-    FLTranspose = new Translation2d(1, new Rotation2d(-FL.getRotation().getDegrees()));
+    FLTranspose = new Translation2d(1, new Rotation2d(-FL.getRotation().getRadians()));
     FLTangent = new Translation2d(FL.getX(), FL.getY()).rotateBy(deg90);
     this.FR = FR;
-    FRTranspose = new Translation2d(1, new Rotation2d(-FR.getRotation().getDegrees()));
+    FRTranspose = new Translation2d(1, new Rotation2d(-FR.getRotation().getRadians()));
     FRTangent = new Translation2d(FR.getX(), FR.getY()).rotateBy(deg90);
     this.RL = RL;
-    RLTranspose = new Translation2d(1, new Rotation2d(-FR.getRotation().getDegrees()));
+    RLTranspose = new Translation2d(1, new Rotation2d(-RL.getRotation().getRadians()));
     RLTangent = new Translation2d(RL.getX(), RL.getY()).rotateBy(deg90);
     this.RR = RR;
-    RRTranspose = new Translation2d(1, new Rotation2d(-RR.getRotation().getDegrees()));
+    RRTranspose = new Translation2d(1, new Rotation2d(-RR.getRotation().getRadians()));
     RRTangent = new Translation2d(RR.getX(), RR.getY()).rotateBy(deg90);
+
+    System.out.println("Drivetrain config:");
+    System.out.println(FL.toString() + " " + FLTangent.toString());
+    System.out.println(FR.toString() + " " + FRTangent.toString());
+    System.out.println(RL.toString() + " " + RLTangent.toString());
+    System.out.println(RR.toString() + " " + RRTangent.toString());
   }
 
   /**
@@ -68,6 +74,29 @@ public class BallDrivetrainConfig {
         break;
       default:
         rot = FLTranspose.getAngle();
+        break;
+    }
+    vector = vector.rotateBy(rot);
+    return vector;
+  }
+
+  public Translation2d ToRefFrame(Translation2d vector, int module) {
+    Rotation2d rot;
+    switch (module) {
+      case 0:
+        rot = FL.getRotation();
+        break;
+      case 1:
+        rot = FR.getRotation();
+        break;
+      case 2:
+        rot = RL.getRotation();
+        break;
+      case 3:
+        rot = RR.getRotation();
+        break;
+      default:
+        rot = FL.getRotation();
         break;
     }
     vector = vector.rotateBy(rot);

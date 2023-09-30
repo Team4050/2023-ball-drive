@@ -27,13 +27,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   /** Subsystems **/
   private final BallDrivetrainConfig drivetrainConfig = new BallDrivetrainConfig(
-    new Pose2d(new Translation2d(1, 1), new Rotation2d(180)), new Pose2d(),
-    new Pose2d(), new Pose2d());
+    new Pose2d(new Translation2d(-1, -1), new Rotation2d(1, 0)), new Pose2d(new Translation2d(-1, 1), new Rotation2d(0, -1)),
+    new Pose2d(new Translation2d(1, -1), new Rotation2d(0, 1)), new Pose2d(new Translation2d(1, 1), new Rotation2d(-1, 0)));
+  //Oops! all spark max
   private final BallDriveSubsystem drivetrain = new BallDriveSubsystem(
     new BallDriveModule(new PWMSparkMax(0), new PWMSparkMax(1)),
-    new BallDriveModule(null, null),
-    new BallDriveModule(null, null),
-    new BallDriveModule(null, null),
+    new BallDriveModule(new PWMSparkMax(2), new PWMSparkMax(3)),
+    new BallDriveModule(new PWMSparkMax(4), new PWMSparkMax(5)),
+    new BallDriveModule(new PWMSparkMax(6), new PWMSparkMax(7)),
     drivetrainConfig, null);
 
   /** Commands **/
@@ -50,11 +51,9 @@ public class RobotContainer {
     //Basic Xbox stick controls
     drivetrain.setDefaultCommand(new RunCommand(() -> {
       drivetrain.set(
+        0,
         0, 
-        -0.01, 
-        0);
-      System.out.println(drivetrain.get()[0].getX());
-      
+        0);      
     }, drivetrain));
   }
 

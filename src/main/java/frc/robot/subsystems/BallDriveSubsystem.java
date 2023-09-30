@@ -52,12 +52,28 @@ public class BallDriveSubsystem extends SubsystemBase {
   public void set(double x, double y, double a) {
     Translation2d V = new Translation2d(x, y);
     Translation2d FLV = config.FLTangent;
-    FLV.times(a);
-    FLV.plus(V);
+    FLV = FLV.times(a);
+    FLV = FLV.plus(V);
     FLV = config.FromRefFrame(FLV, 0);
     FL.set(FLV.getX(), FLV.getY());
 
-    /* TODO: test FL and if it works create code for all other modules */
+    Translation2d FRV = config.FRTangent;
+    FRV = FRV.times(a);
+    FRV = FRV.plus(V);
+    FRV = config.FromRefFrame(FRV, 1);
+    FR.set(FRV.getX(), FRV.getY());
+
+    Translation2d RLV = config.RLTangent;
+    RLV = RLV.times(a);
+    RLV = RLV.plus(V);
+    RLV = config.FromRefFrame(RLV, 2);
+    RL.set(RLV.getX(), RLV.getY());
+
+    Translation2d RRV = config.RRTangent;
+    RRV = RRV.times(a);
+    RRV = RRV.plus(V);
+    RRV = config.FromRefFrame(RRV, 3);
+    RR.set(RRV.getX(), RRV.getY());
   }
 
   /**
@@ -79,9 +95,9 @@ public class BallDriveSubsystem extends SubsystemBase {
    */
   public Translation2d[] get() {
     return new Translation2d[] {
-      FL.getVector().rotateBy(config.FLTranspose.getAngle()),
-      FR.getVector().rotateBy(config.FRTranspose.getAngle()),
-      RL.getVector().rotateBy(config.RLTranspose.getAngle()),
-      RR.getVector().rotateBy(config.RRTranspose.getAngle())};
+      FL.getVector().rotateBy(config.FL.getRotation()),
+      FR.getVector().rotateBy(config.FR.getRotation()),
+      RL.getVector().rotateBy(config.RL.getRotation()),
+      RR.getVector().rotateBy(config.RR.getRotation())};
   }
 }
