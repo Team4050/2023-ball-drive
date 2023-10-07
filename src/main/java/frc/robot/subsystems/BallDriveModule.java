@@ -6,15 +6,18 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 public class BallDriveModule {
   private MotorController X;
   private MotorController Y;
+  private double xT, yT = 0;
+  private double maxStep = 0.5;
 
   /**
    * Constructs a ball drive module from two motors, X & Y
    * @param X The motor on the left of the module, looking forward
    * @param Y The motor on the back side of the module, looking forward
    */
-  public BallDriveModule(MotorController X, MotorController Y) {
+  public BallDriveModule(MotorController X, MotorController Y, double maxStep) {
     this.X = X;
     this.Y = Y;
+    this.maxStep = maxStep;
   }
 
   /**
@@ -23,8 +26,18 @@ public class BallDriveModule {
    * @param y
    */
   public void set(double x, double y) {
-    X.set(x);
-    Y.set(y);
+    if (x - xT > maxStep) xT += maxStep;
+    else if (x - xT < -maxStep) xT -= maxStep;
+    else xT = x;
+
+    if (y - yT > maxStep) yT += maxStep;
+    else if (y - yT < -maxStep) yT -= maxStep;
+    else yT = y;
+
+    limitSpeed(1);
+
+    X.set(xT);
+    Y.set(yT);
   }
 
   /**
@@ -41,5 +54,14 @@ public class BallDriveModule {
    */
   public Translation2d getVector() {
     return new Translation2d(X.get(), Y.get());
+  }
+
+  public void limitSpeed(double speed) {
+    double mag = Math.hypot(xT, yT);
+    if (mag > speed) {
+      mag = speed / mag;
+      xT *= mag;
+      yT *= mag;
+    }
   }
 }

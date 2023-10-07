@@ -24,6 +24,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+
+ /*
+  * Scale input joystick rotational velocity - done
+  * Normalize to maximum module velocity - done
+  * Rate limit acceleration per module - done
+  * Check scenarios
+  */
 public class RobotContainer {
   /** Subsystems **/
   private final BallDrivetrainConfig drivetrainConfig = new BallDrivetrainConfig(
@@ -31,10 +38,10 @@ public class RobotContainer {
     new Pose2d(new Translation2d(1, -1), new Rotation2d(0, 1)), new Pose2d(new Translation2d(1, 1), new Rotation2d(-1, 0)));
   //Oops! all spark max
   private final BallDriveSubsystem drivetrain = new BallDriveSubsystem(
-    new BallDriveModule(new PWMSparkMax(0), new PWMSparkMax(1)),
-    new BallDriveModule(new PWMSparkMax(2), new PWMSparkMax(3)),
-    new BallDriveModule(new PWMSparkMax(4), new PWMSparkMax(5)),
-    new BallDriveModule(new PWMSparkMax(6), new PWMSparkMax(7)),
+    new BallDriveModule(new PWMSparkMax(0), new PWMSparkMax(1), 0.5),
+    new BallDriveModule(new PWMSparkMax(2), new PWMSparkMax(3), 0.5),
+    new BallDriveModule(new PWMSparkMax(4), new PWMSparkMax(5), 0.5),
+    new BallDriveModule(new PWMSparkMax(6), new PWMSparkMax(7), 0.5),
     drivetrainConfig, null);
 
   /** Commands **/
@@ -51,9 +58,9 @@ public class RobotContainer {
     //Basic Xbox stick controls
     drivetrain.setDefaultCommand(new RunCommand(() -> {
       drivetrain.set(
-        0,
+        1,
         0, 
-        0);      
+        1);      
     }, drivetrain));
   }
 

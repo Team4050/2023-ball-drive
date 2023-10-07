@@ -33,16 +33,16 @@ public class BallDrivetrainConfig {
     Rotation2d deg90 = new Rotation2d(Math.PI * 0.5);
     this.FL = FL;
     FLTranspose = new Translation2d(1, new Rotation2d(-FL.getRotation().getRadians()));
-    FLTangent = new Translation2d(FL.getX(), FL.getY()).rotateBy(deg90);
+    FLTangent = normalize(new Translation2d(FL.getX(), FL.getY()).rotateBy(deg90));
     this.FR = FR;
     FRTranspose = new Translation2d(1, new Rotation2d(-FR.getRotation().getRadians()));
-    FRTangent = new Translation2d(FR.getX(), FR.getY()).rotateBy(deg90);
+    FRTangent = normalize(new Translation2d(FR.getX(), FR.getY()).rotateBy(deg90));
     this.RL = RL;
     RLTranspose = new Translation2d(1, new Rotation2d(-RL.getRotation().getRadians()));
-    RLTangent = new Translation2d(RL.getX(), RL.getY()).rotateBy(deg90);
+    RLTangent = normalize(new Translation2d(RL.getX(), RL.getY()).rotateBy(deg90));
     this.RR = RR;
     RRTranspose = new Translation2d(1, new Rotation2d(-RR.getRotation().getRadians()));
-    RRTangent = new Translation2d(RR.getX(), RR.getY()).rotateBy(deg90);
+    RRTangent = normalize(new Translation2d(RR.getX(), RR.getY()).rotateBy(deg90));
 
     System.out.println("Drivetrain config:");
     System.out.println(FL.toString() + " " + FLTangent.toString());
@@ -101,5 +101,9 @@ public class BallDrivetrainConfig {
     }
     vector = vector.rotateBy(rot);
     return vector;
+  }
+
+  public Translation2d normalize(Translation2d v) {
+    return v.div(v.getNorm());
   }
 }

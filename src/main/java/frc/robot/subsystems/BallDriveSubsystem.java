@@ -12,14 +12,12 @@ public class BallDriveSubsystem extends SubsystemBase {
   /*
    * Drive modules & module config
    */
-  //#region
-  private BallDriveModule FL;
-  private BallDriveModule FR;
-  private BallDriveModule RL;
-  private BallDriveModule RR;
-
+  private BallDriveModule FL, FR, RL, RR;
   private BallDrivetrainConfig config;
-  //#endregion
+
+  private double xT, yT, aT = 0;
+  private double aScale = 0.5;
+  private double maxXStep, maxYStep, maxAStep = 10; //Tied to loop cycle time, need to test to find optimal step speed
 
   private InformationSubsystem info;
 
@@ -38,18 +36,43 @@ public class BallDriveSubsystem extends SubsystemBase {
     this.RL = RL;
     this.RR = RR;
     this.config = config;
+    maxXStep = 10;
+    maxYStep = 10;
+    maxAStep = 10;
     //SwerveDriveKinematics k = new SwerveDriveKinematics(null);
     //FourWheelSwerveConfiguration config = new FourWheelSwerveConfiguration(null, null, null, null, null, null);
     //driveTrain = new SwerveDriveTrain(config, null);
   }
+  /**
+   * Sets the drivetrain's target speed with a limit on changes in speed.
+   * @param x Forward/back target speed
+   * @param y Strafing target speed
+   * @param a Turning target speed
+   */
+  public void set(double x, double y, double a) {
+    if (x - xT > maxXStep) xT += maxXStep;
+    else if (x - xT < -maxXStep) xT -= maxXStep;
+    else xT = x;
+
+    if (y - yT > maxYStep) yT += maxYStep;
+    else if (y - yT < -maxYStep) yT -= maxYStep;
+    else yT = y;
+
+    if (a - aT > maxAStep) aT += maxAStep;
+    else if (a - aT < -maxAStep) aT -= maxAStep;
+    else aT = a;
+
+    setUnlimited(xT, yT, aT * aScale);
+  }
+
 
   /**
-   * Sets the drivetrain's target speed
+   * Sets the drivetrain's speed to the target speed
    * @param x Forward/back speed
    * @param y Strafing speed
    * @param a Turning speed
    */
-  public void set(double x, double y, double a) {
+  public void setUnlimited(double x, double y, double a) {
     Translation2d V = new Translation2d(x, y);
     Translation2d FLV = config.FLTangent;
     FLV = FLV.times(a);
