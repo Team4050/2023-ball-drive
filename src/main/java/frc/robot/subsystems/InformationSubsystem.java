@@ -28,7 +28,7 @@ public class InformationSubsystem extends SubsystemBase {
 
   /* Filters & Estimators */
   //TODO: Make ball drive pose estimator
-  //private MecanumDrivePoseEstimator drivetrainPoseEstimator;
+  private BallDriveOdometry drivetrainPoseEstimator;
   private Pose3d estimatedPose;
   private Field2d dashboardField;
   private AprilTagFieldLayout layout;
@@ -49,12 +49,14 @@ public class InformationSubsystem extends SubsystemBase {
 
     //Removed FilteredDrivetrainControl
 
-    estimatedPose = new Pose3d(startingPose);
+    estimatedPose = new Pose3d(drivetrainPoseEstimator.update());
+    dashboardField.setRobotPose(estimatedPose.toPose2d());
+    //new Pose3d(startingPose);
 
-    Optional<EstimatedRobotPose> p = camera.getEstimatedGlobalPose(startingPose);
+    /*Optional<EstimatedRobotPose> p = camera.getEstimatedGlobalPose(startingPose);
     if (p.isPresent()) {
       estimatedPose = p.get().estimatedPose;
-    }
+    }*/
 
     camera.claw.setDriverMode(true);
 
@@ -70,24 +72,8 @@ public class InformationSubsystem extends SubsystemBase {
   }
 
   public void updatePoseEstimate(double dT, double[] encoderPositions) {
-    // double[][] columnVec = {{imu.getAccelX() + 0.4}, {imu.getAccelY() + 0.49}, {imu.getRate()}};
-    // filter.execute(dT, columnVec);
-
-    Optional<EstimatedRobotPose> p = camera.getEstimatedGlobalPose();
-
-    if (p.isPresent()) {
-      // SmartDashboard.putData("Field", dashboardField);
-
-      if (camera.isTrustworthy()){
-        //drivetrainPoseEstimator.addVisionMeasurement(p.get().estimatedPose.toPose2d(), dT);
-      }
-    }
-
-    // TODO: try updateWithTime using the Timer class
-
-    //estimatedPose = new Pose3d(drivetrainPoseEstimator.getEstimatedPosition());
-
-    dashboardField.setRobotPose(getPoseEstimate().toPose2d());
+    estimatedPose = new Pose3d(drivetrainPoseEstimator.update());
+    dashboardField.setRobotPose(estimatedPose.toPose2d());
   }
 
   public Pose3d getPoseEstimate() {

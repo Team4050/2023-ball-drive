@@ -6,15 +6,18 @@ package frc.robot;
 
 import frc.robot.Constants.Operator;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DriveToPosition;
 import frc.robot.subsystems.BallDriveModule;
 import frc.robot.subsystems.BallDriveSubsystem;
 import frc.robot.subsystems.BallDrivetrainConfig;
+import frc.robot.subsystems.InformationSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -36,6 +39,7 @@ public class RobotContainer {
   private final BallDrivetrainConfig drivetrainConfig = new BallDrivetrainConfig(
     new Pose2d(new Translation2d(-1, -1), new Rotation2d(1, 0)), new Pose2d(new Translation2d(-1, 1), new Rotation2d(0, -1)),
     new Pose2d(new Translation2d(1, -1), new Rotation2d(0, 1)), new Pose2d(new Translation2d(1, 1), new Rotation2d(-1, 0)));
+  private final InformationSubsystem info = new InformationSubsystem(null, new Pose2d(0, 0, new Rotation2d()));
   //Oops! all spark max
   private final BallDriveSubsystem drivetrain = new BallDriveSubsystem(
     new BallDriveModule(new PWMSparkMax(0), new PWMSparkMax(1), 0.5),
@@ -84,6 +88,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     /* TODO: Autonomous */
-    return null;
+    return new SequentialCommandGroup(
+      new DriveToPosition(drivetrain, info, new Pose2d(1, 1, new Rotation2d())),
+      new DriveToPosition(drivetrain, info, new Pose2d(-10, 10, new Rotation2d(80))),
+      new DriveToPosition(drivetrain, info, new Pose2d(0, 0, new Rotation2d(180))));
   }
 }
