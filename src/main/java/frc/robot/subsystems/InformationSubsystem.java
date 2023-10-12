@@ -49,8 +49,8 @@ public class InformationSubsystem extends SubsystemBase {
 
     //Removed FilteredDrivetrainControl
 
-    estimatedPose = new Pose3d(drivetrainPoseEstimator.update());
-    dashboardField.setRobotPose(estimatedPose.toPose2d());
+    //estimatedPose = new Pose3d(drivetrainPoseEstimator.update());
+    //dashboardField.setRobotPose(estimatedPose.toPose2d());
     //new Pose3d(startingPose);
 
     /*Optional<EstimatedRobotPose> p = camera.getEstimatedGlobalPose(startingPose);

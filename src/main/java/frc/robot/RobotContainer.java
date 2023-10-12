@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -49,10 +50,10 @@ public class RobotContainer {
   private final InformationSubsystem info = new InformationSubsystem(new ADIS16470_IMU(IMUAxis.kZ, Port.kMXP, CalibrationTime._512ms), new Pose2d(0, 0, new Rotation2d()));
   //Oops! all spark max
   private final BallDriveSubsystem drivetrain = new BallDriveSubsystem(
-    new BallDriveModule(new PWMSparkMax(0), new PWMSparkMax(1), 0.5),
-    new BallDriveModule(new PWMSparkMax(2), new PWMSparkMax(3), 0.5),
-    new BallDriveModule(new PWMSparkMax(4), new PWMSparkMax(5), 0.5),
-    new BallDriveModule(new PWMSparkMax(6), new PWMSparkMax(7), 0.5),
+    new BallDriveModule(new PWMTalonSRX(0), new PWMTalonSRX(1), 0.5, false, false),
+    new BallDriveModule(new PWMTalonSRX(2), new PWMTalonSRX(3), 0.5, false, false),
+    new BallDriveModule(new PWMTalonSRX(4), new PWMTalonSRX(5), 0.5, false, false),
+    new BallDriveModule(new PWMTalonSRX(6), new PWMTalonSRX(7), 0.5, false, false),
     drivetrainConfig, null);
 
   /** Commands **/
@@ -67,11 +68,12 @@ public class RobotContainer {
     configureBindings();
 
     //Basic Xbox stick controls
+    drivetrain.setDisable(new boolean[] {false, false, true, true});
     drivetrain.setDefaultCommand(new RunCommand(() -> {
       drivetrain.set(
-        1,
+        0.2,
         0, 
-        1);      
+        0);      
     }, drivetrain));
   }
 

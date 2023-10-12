@@ -13,6 +13,7 @@ public class BallDriveSubsystem extends SubsystemBase {
    * Drive modules & module config
    */
   private BallDriveModule FL, FR, RL, RR;
+  private boolean[] disable;
   private BallDrivetrainConfig config;
 
   private double xT, yT, aT = 0;
@@ -39,6 +40,11 @@ public class BallDriveSubsystem extends SubsystemBase {
     maxXStep = 10;
     maxYStep = 10;
     maxAStep = 10;
+    disable = new boolean[4];
+    disable[0] = false;
+    disable[1] = false;
+    disable[2] = false;
+    disable[3] = false;
     //SwerveDriveKinematics k = new SwerveDriveKinematics(null);
     //FourWheelSwerveConfiguration config = new FourWheelSwerveConfiguration(null, null, null, null, null, null);
     //driveTrain = new SwerveDriveTrain(config, null);
@@ -74,29 +80,41 @@ public class BallDriveSubsystem extends SubsystemBase {
    */
   public void setUnlimited(double x, double y, double a) {
     Translation2d V = new Translation2d(x, y);
-    Translation2d FLV = config.FLTangent;
-    FLV = FLV.times(a);
-    FLV = FLV.plus(V);
-    FLV = config.FromRefFrame(FLV, 0);
-    FL.set(FLV.getX(), FLV.getY());
+    if (!disable[0]) {
+      Translation2d FLV = config.FLTangent;
+      FLV = FLV.times(a);
+      FLV = FLV.plus(V);
+      FLV = config.FromRefFrame(FLV, 0);
+      FL.set(FLV.getX(), FLV.getY());
+    }
 
-    Translation2d FRV = config.FRTangent;
-    FRV = FRV.times(a);
-    FRV = FRV.plus(V);
-    FRV = config.FromRefFrame(FRV, 1);
-    FR.set(FRV.getX(), FRV.getY());
+    if (!disable[1]) {
+      Translation2d FRV = config.FRTangent;
+      FRV = FRV.times(a);
+      FRV = FRV.plus(V);
+      FRV = config.FromRefFrame(FRV, 1);
+      FR.set(FRV.getX(), FRV.getY());
+    }
 
-    Translation2d RLV = config.RLTangent;
-    RLV = RLV.times(a);
-    RLV = RLV.plus(V);
-    RLV = config.FromRefFrame(RLV, 2);
-    RL.set(RLV.getX(), RLV.getY());
+    if (!disable[2]) {
+      Translation2d RLV = config.RLTangent;
+      RLV = RLV.times(a);
+      RLV = RLV.plus(V);
+      RLV = config.FromRefFrame(RLV, 2);
+      RL.set(RLV.getX(), RLV.getY());
+    }
 
-    Translation2d RRV = config.RRTangent;
-    RRV = RRV.times(a);
-    RRV = RRV.plus(V);
-    RRV = config.FromRefFrame(RRV, 3);
-    RR.set(RRV.getX(), RRV.getY());
+    if (!disable[3]) {
+      Translation2d RRV = config.RRTangent;
+      RRV = RRV.times(a);
+      RRV = RRV.plus(V);
+      RRV = config.FromRefFrame(RRV, 3);
+      RR.set(RRV.getX(), RRV.getY());
+    }
+  }
+
+  public void setDisable(boolean[] n) {
+    disable = n;
   }
 
   /**

@@ -14,10 +14,12 @@ public class BallDriveModule {
    * @param X The motor on the left of the module, looking forward
    * @param Y The motor on the back side of the module, looking forward
    */
-  public BallDriveModule(MotorController X, MotorController Y, double maxStep) {
+  public BallDriveModule(MotorController X, MotorController Y, double maxStep, boolean Xreverse, boolean Yreverse) {
     this.X = X;
     this.Y = Y;
     this.maxStep = maxStep;
+    X.setInverted(Xreverse);
+    Y.setInverted(Yreverse);
   }
 
   /**
