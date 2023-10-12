@@ -48,6 +48,10 @@ public class BallDriveModule {
     return new double[] {X.get(), Y.get()};
   }
 
+  public double getMag() {
+    return Math.hypot(X.get(), Y.get());
+  }
+
   /**
    * Returns a vector determined by the get() functions of motors X & Y
    * @return
