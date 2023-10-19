@@ -63,7 +63,7 @@ public final class Constants {
   }
 
   public static class Actuators {
-    public static final int Arm = 10;
+    public static final int Arm = 6;
     public static final int ArmLimitA = 0;
     public static final int ArmLimitB = 0;
     public static final int Wrist = 11;
@@ -85,9 +85,9 @@ public final class Constants {
   public static class Pneumatics {
     public static final int PCM = 1;
     public static final PneumaticsModuleType Module = PneumaticsModuleType.CTREPCM;
-    public static final int ClawFwdChannel = 0;
-    public static final int ClawRevChannel = 1;
-    public static final int ArmFwdChannel = 2;
+    public static final int ClawFwdChannel = 1;
+    public static final int ClawRevChannel = 2;
+    public static final int ArmFwdChannel = 0;
     public static final int ArmRevChannel = 3;
   }
 }

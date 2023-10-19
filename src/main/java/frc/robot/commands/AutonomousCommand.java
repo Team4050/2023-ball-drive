@@ -57,14 +57,17 @@ public class AutonomousCommand extends CommandBase {
   @Override
   public void execute() {
     drivetrain.set(speed.getX(), speed.getY(), 0);
-    if (grab) {
-      claw.setTargetState(Value.kForward);
-    } else {
-      claw.setTargetState(Value.kReverse);
+    if (claw != null) {
+      if (grab) {
+        claw.setTargetState(Value.kForward);
+      } else {
+        claw.setTargetState(Value.kReverse);
+      }
+      claw.activate();
     }
-    claw.activate();
-
-    arm.setpoint(armPos);
+    if (arm != null) {
+      arm.setpoint(armPos);
+    }
   }
 
   @Override

@@ -82,6 +82,7 @@ public class InformationSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (true) return;
     Optional<EstimatedRobotPose> estimatedPose = camera.getEstimatedGlobalPose(new Pose2d());
 
     if (estimatedPose.isPresent()) {

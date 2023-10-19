@@ -9,10 +9,8 @@ import frc.robot.Constants;
 
 public class ClawSubsystem extends SubsystemBase {
   private DoubleSolenoid piston;
-  private WPI_TalonSRX wristMotor = new WPI_TalonSRX(Constants.Actuators.Wrist);
 
   private Value target;
-  private double wristLimit = 0.75;
 
   public ClawSubsystem() {
     piston =
@@ -35,13 +33,5 @@ public class ClawSubsystem extends SubsystemBase {
   /** Powers the piston, moving it to the target state */
   public void activate() {
     piston.set(target);
-  }
-
-  public void setWrist(double speed) {
-    wristMotor.set(ControlMode.PercentOutput, speed * 0.75); // wristLimit
-  }
-
-  public void setWristLimit(int limit) {
-    wristLimit = limit / 100;
   }
 }

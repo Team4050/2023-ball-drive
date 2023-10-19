@@ -7,6 +7,7 @@ import cshcyberhawks.swolib.swerve.SwerveDriveTrain;
 import cshcyberhawks.swolib.swerve.configurations.FourWheelSwerveConfiguration;
 import cshcyberhawks.swolib.swerve.configurations.SwerveModuleConfiguration;*/
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.InformationSubsystem.axis;
 
 public class BallDriveSubsystem extends SubsystemBase {
   /*
@@ -17,7 +18,7 @@ public class BallDriveSubsystem extends SubsystemBase {
   private BallDrivetrainConfig config;
 
   private double xT, yT, aT = 0;
-  private double aScale = 0.5;
+  private double aScale = 1;
   private double maxXStep, maxYStep, maxAStep = 10; //Tied to loop cycle time, need to test to find optimal step speed
 
   private InformationSubsystem info;
@@ -37,6 +38,7 @@ public class BallDriveSubsystem extends SubsystemBase {
     this.RL = RL;
     this.RR = RR;
     this.config = config;
+    this.info = info;
     maxXStep = 10;
     maxYStep = 10;
     maxAStep = 10;
@@ -124,7 +126,7 @@ public class BallDriveSubsystem extends SubsystemBase {
    * @param a Turning speed
    */
   public void setAbsolute(double x, double y, double a) {
-    Rotation2d rotation = info.getPoseEstimate().toPose2d().getRotation();
+    Rotation2d rotation = new Rotation2d(Math.toDegrees(info.getData(axis.ZRot)));
     Translation2d vector = new Translation2d(x, y);
     vector.rotateBy(rotation.unaryMinus());
     set(vector.getX(), vector.getY(), a);

@@ -7,7 +7,7 @@ public class BallDriveModule {
   private MotorController X;
   private MotorController Y;
   private double xT, yT = 0;
-  private double maxStep = 0.5;
+  private double maxStep = 0.05;
 
   /**
    * Constructs a ball drive module from two motors, X & Y
@@ -28,18 +28,33 @@ public class BallDriveModule {
    * @param y
    */
   public void set(double x, double y) {
-    if (x - xT > maxStep) xT += maxStep;
-    else if (x - xT < -maxStep) xT -= maxStep;
-    else xT = x;
+    if (Math.abs(x) < 0.01) {
+      x = 0;
+      xT = 0;
+    } else {
+      if (x - xT > maxStep) xT += maxStep;
+      else if (x - xT < -maxStep) xT -= maxStep;
+      else xT = x;
+    }
 
-    if (y - yT > maxStep) yT += maxStep;
-    else if (y - yT < -maxStep) yT -= maxStep;
-    else yT = y;
+    if (Math.abs(y) < 0.01) {
+      y = 0;
+      yT = 0;
+    } else {
+      if (y - yT > maxStep) yT += maxStep;
+      else if (y - yT < -maxStep) yT -= maxStep;
+      else yT = y;  
+    }
 
     limitSpeed(1);
 
     X.set(xT);
     Y.set(yT);
+  }
+
+  public void setTargetDirect(double xT, double yT) {
+    this.xT = xT;
+    this.yT = yT;
   }
 
   /**
